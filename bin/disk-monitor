@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+
+set -u
+set -o pipefail
+
+cd "$HOME"
+
+while true; do
+
+    clear
+
+    # build and test products and other temp files (mainly RAM)
+    du -shc -t 1024M \
+       /tmp/* /run/*/*/* \
+       zebra/target/* .cache/sccache zcash .ccache 2>/dev/null
+    echo
+
+    # Zebra and zcashd caches (on disk)
+    du -shc -t 1024M \
+       .cache/zebra-tmp/* \
+       .cache/zebra*/*/*/* .cache/zebra-log/* .zcash*  2>/dev/null
+    echo
+
+    # built binaries (on disk)
+    du -shc -t 1024M \
+       rust-analyzer .cargo .rustup bin 2>/dev/null
+    echo
+
+    # coredumps (on disk)
+    du -sh -t 1M \
+       .cache/coredump 2>/dev/null
+
+    sleep 60
+done

@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+IFS=$'\n\t'
+
+export RUST_BACKTRACE=${RUST_BACKTRACE:-full}
+export RUST_LIB_BACKTRACE=${RUST_LIB_BACKTRACE:-full}
+export COLORBT_SHOW_HIDDEN=${COLORBT_SHOW_HIDDEN:-0}
+
+#export RUST_LOG=${RUST_LOG:-warn}
+
+if [ -t 1 ]; then
+    export color="--color=always"
+else
+    export color=""
+fi
+
+for d in zebra*; do
+    # skip quick tests
+    if [[ \
+          "$d" == "zebra-client" || \
+          "$d" == "zebra-consensus" || \
+          "$d" == "zebrad" || \
+          "$d" == "zebra-network" || \
+          "$d" == "zebra-rpc" || \
+          "$d" == "zebra-script" || \
+          "$d" == "zebra-state" || \
+          "$d" == "zebra-test" || \
+          "$d" == "zebra-utils" \
+        ]]; then
+        continue
+    fi
+
+    pushd "$d" && \
+        cargo clippy --tests $color --quiet && \
+        cargo build --tests $color --quiet && \
+        time cargo test $color --message-format short && \
+        popd
+done

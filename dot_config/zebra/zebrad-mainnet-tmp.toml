@@ -1,0 +1,53 @@
+# zebrad Mainnet with ephemeral cache
+
+[consensus]
+checkpoint_sync = false
+#checkpoint_sync = true
+
+[network]
+initial_mainnet_peers = [
+# Global seeders
+    'dnsseed.z.cash:8233',
+    'dnsseed.str4d.xyz:8233',
+    'mainnet.is.yolo.money:8233',
+    'mainnet.seeder.zfnd.org:8233',
+
+# Local instances
+# zcashd
+     '127.0.0.1:48233',
+     '192.168.215.106:48233',
+     '192.168.215.108:48233',
+# zebrad
+     '127.0.0.1:28233',
+     '192.168.215.106:28233',
+     '192.168.215.108:28233',
+]
+# pick an unused port
+listen_addr = '0.0.0.0:0'
+network = 'Mainnet'
+#peerset_initial_target_size = 25
+
+[state]
+ephemeral = true
+#cache_dir = '/home/dev/.cache/zebra-tmp'
+#debug_stop_at_height = 0
+
+[sync]
+#max_concurrent_block_requests = 1000
+#lookahead_limit = 2000
+
+[tracing]
+filter = 'info'
+#filter = 'debug'
+#filter = 'trace'
+#filter = 'info,zebrad=debug'
+#filter = 'info,zebra_consensus=debug,zebra_chain=debug,zebra_script=debug,zebra_state=debug'
+#filter = 'info,zebra_chain=debug,zebra_script=debug,zebra_state=debug,zebra_consensus::block[{}]=trace'
+
+#flamegraph = 'flamegraph'
+#endpoint_addr = '127.0.0.1:3000'
+
+[metrics]
+# ephemeral port for investigation - discover port number from logs or `lsof`
+endpoint_addr = '0.0.0.0:0'
+#endpoint_addr = '0.0.0.0:29999'

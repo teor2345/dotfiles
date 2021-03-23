@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+
+set -u
+set -o pipefail
+IFS=$'\n\t'
+
+ZCASH_DIR=${1:-~/.zcash}
+while true; do
+      clear
+      tail -n 200 "$ZCASH_DIR/debug.log" | \
+          grep --line-buffered -v -e "overwinter is not active" \
+               -e "AcceptToMemoryPool: ContextualCheckTransaction failed" | \
+          sed -u -e 's/: new best=[0-9a-f]* //' \
+              -e 's/height=/h=/' \
+              -e 's/bits=[0-9]* //' \
+              -e 's/log2_work=\([0-9]*[.]*[0-9]\{0,5\}\)[0-9]*/wk=\1/' \
+              -e 's/date=/dt=/' \
+              -e 's/progress=/p=/' \
+              -e 's/cache=/c=/' \
+              -e 's/  / /g' | \
+          tail -n 30
+      echo
+      echo "Block:"
+      tail -n 4 "$ZCASH_DIR/block.log" 2>/dev/null
+      echo
+      echo "Wallet:"
+      tail -n 4 "$ZCASH_DIR/wallet.log" 2>/dev/null
+      echo
+      echo "Alert:"
+      tail -n 4 "$ZCASH_DIR/alert.log" 2>/dev/null | \
+          sed -u -e 's/abnormally high number of blocks generated,//' \
+              -e 's/  / /g'
+      sleep 10
+done

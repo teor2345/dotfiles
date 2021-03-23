@@ -1,0 +1,33 @@
+scrape_configs:
+  - job_name: 'zebrad-mainnet'
+    scrape_interval: 500ms
+    metrics_path: '/'
+    static_configs:
+      - targets: ['localhost:9999']
+  - job_name: 'zebrad-testnet'
+    scrape_interval: 500ms
+    metrics_path: '/'
+    static_configs:
+      - targets: ['localhost:19999']
+
+  - job_name: 'zebrad-mainnet-tmp-1'
+    scrape_interval: 500ms
+    metrics_path: '/'
+    static_configs:
+      - targets: ['localhost:36921']
+  - job_name: 'zebrad-mainnet-tmp-2'
+    scrape_interval: 500ms
+    metrics_path: '/'
+    static_configs:
+      - targets: ['localhost:41599']
+
+  - job_name: 'zebrad-testnet-tmp-1'
+    scrape_interval: 500ms
+    metrics_path: '/'
+    static_configs:
+      - targets: ['localhost:37487']
+  - job_name: 'zebrad-testnet-tmp-2'
+    scrape_interval: 500ms
+    metrics_path: '/'
+    static_configs:
+      - targets: ['localhost:39491']

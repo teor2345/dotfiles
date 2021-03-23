@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+IFS=$'\n\t'
+
+# Fallback script for cargo-fmt
+
+# rustup-auto, nightly, stable
+
+cargo fmt "$@" || \
+    cargo +nightly fmt "$@" || \
+    cargo +stable fmt "$@"

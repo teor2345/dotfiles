@@ -1,0 +1,61 @@
+# Profile tweaks
+
+[profile.release]
+#lto = true
+
+[profile.dev]
+# too much CPU, RAM, and disk load
+#lto = true
+
+[profile.test]
+# doesn't work?
+#lto = true
+
+[profile.release.package.zebra]
+debug = 1
+
+[profile.dev.package."*"]
+#opt-level=1
+
+[profile.test.package."*"]
+#opt-level=1
+
+# Faster link settings
+
+[build]
+# too much CPU, RAM, and disk load
+#incremental = false
+
+[llvm]
+use-linker = "lld"
+
+[rust]
+use-lld = true
+
+[target.x86_64-unknown-linux-gnu]
+linker = "clang"
+rustflags = [
+#          "-Cembed-bitcode=no",
+          "-Clink-arg=-fuse-ld=lld",
+          "-Zshare-generics=y",
+]
+
+#[target.x86_64-apple-darwin]
+#rustflags = [
+#          "-Zshare-generics=y",
+#]
+
+#[target.x86_64-pc-windows-msvc]
+#linker = "rust-lld.exe"
+#rustflags = [
+#          "-Zshare-generics=y",
+#]
+
+
+#rustflags = [
+# Needs compatible clang and rustc versions
+#    "-Clinker-plugin-lto"
+#    "-Clink-arg=-flto=thin",
+# Incompatible with lto
+#    "-Cembed-bitcode=no",
+#]

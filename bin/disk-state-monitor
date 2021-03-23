@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+set -u
+set -o pipefail
+IFS=$'\n\t'
+
+while true; do
+      clear
+      du -shc -t 1M ~/.cache/zebra*/*/*/*
+      sleep 10
+done

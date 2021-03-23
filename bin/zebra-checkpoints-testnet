@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+IFS=$'\n\t'
+
+ZEBRA_CHECKPOINTS_CMD="${0%-testnet}"
+ZCASH_TESTNET_CONF="-conf=$HOME/.zcash-testnet/zcash.conf"
+
+# TODO: -cli and -c go before "--", everything else goes after
+
+echo "" 1>&2
+echo "$ZEBRA_CHECKPOINTS_CMD" "$@" "--" "$ZCASH_TESTNET_CONF" 1>&2
+echo "" 1>&2
+
+"$ZEBRA_CHECKPOINTS_CMD" "$@" "--" "$ZCASH_TESTNET_CONF"

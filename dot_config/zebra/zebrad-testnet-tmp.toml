@@ -1,0 +1,55 @@
+# zebrad Testnet with ephemeral cache
+
+[consensus]
+checkpoint_sync = false
+#checkpoint_sync = true
+
+[network]
+initial_testnet_peers = [
+# Global seeders
+    'dnsseed.testnet.z.cash:18233',
+    'testnet.seeder.zfnd.org:18233',
+    'testnet.is.yolo.money:18233',
+
+# Local instances
+# zcashd
+     '127.0.0.1:58233',
+     '192.168.215.106:58233',
+     '192.168.215.108:58233',
+# zebrad
+     '127.0.0.1:38233',
+     '192.168.215.106:38233',
+     '192.168.215.108:38233',
+]
+# pick an unused port
+listen_addr = '0.0.0.0:0'
+network = 'Testnet'
+# Testnet doesn't have a lot of peers,
+# try to make sure most fanouts have a local peer
+#peerset_initial_target_size = 25
+
+[state]
+ephemeral = true
+#cache_dir = '/home/dev/.cache/zebra-tmp'
+#debug_stop_at_height = 653400 # checkpoint before testnet max time start height
+
+[sync]
+#max_concurrent_block_requests = 1000
+#lookahead_limit = 2000
+
+[tracing]
+filter = 'info'
+
+#filter = 'trace'
+#filter = 'info,zebra_consensus=debug,[{e}]=debug'
+#error downloading and verifying block e=Block(Transaction(WrongVersion))
+#filter = 'info,zebrad=debug'
+#filter = 'info,zebrad=debug,zebra_consensus=debug'
+
+#flamegraph = 'flamegraph'
+#endpoint_addr = '127.0.0.1:13000'
+
+[metrics]
+# ephemeral port for investigation - discover port number from logs or `lsof`
+endpoint_addr = '0.0.0.0:0'
+#endpoint_addr = '0.0.0.0:19999'

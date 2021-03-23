@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+IFS=$'\n\t'
+
+CMD_BASE=$(basename "$0")
+ZEBRA_BIN="${CMD_BASE#cargo-build-}"
+
+cargo build --bin "$ZEBRA_BIN" "$@"

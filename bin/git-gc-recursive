@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+IFS=$'\n\t'
+
+FIND_PATH="."
+
+if [ $# -ge 1 ]; then
+    FIND_PATH="$1"
+fi
+
+find "$FIND_PATH" -name .git -a -type d | xargs -n 1 dirname \
+    | xargs -n 1 ~/bin/git-gc-aggressive

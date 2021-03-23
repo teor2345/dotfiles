@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+set -u
+IFS=$'\n\t'
+
+while true; do
+  clear
+  zpool status -stx | grep -v "all pools are healthy"
+  echo
+  df -h | grep -e '[5-9][0-9][%]' -e '100[%]'
+  sleep 60
+done

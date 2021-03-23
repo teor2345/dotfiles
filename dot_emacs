@@ -1,0 +1,231 @@
+;;; package --- Summary
+
+;;; Commentary:
+
+;;; Code:
+
+;; initialize paradox
+(require 'paradox)
+(paradox-enable)
+
+;(require 'package)
+;(package-initialize)
+
+(require 'use-package)
+(setq package-archives '(("melpa" . "http://melpa.org/packages/")
+                         ("gnu" . "http://elpa.gnu.org/packages/")))
+
+(use-package use-package-ensure
+  :config
+  (setq use-package-always-ensure t))
+
+(use-package use-package-ensure-system-package)
+(use-package system-packages)
+
+(use-package auto-package-update
+  :config
+  (setq auto-package-update-delete-old-versions t)
+  (setq auto-package-update-hide-results t)
+  (auto-package-update-maybe))
+
+(use-package restart-emacs
+  :ensure t)
+
+; Show column numbers
+(setq-default column-number-mode t)
+
+; Clean trailing whitespace, show it if it happens
+(setq-default show-trailing-whitespace t)
+(use-package ws-butler
+  :ensure t
+  :init
+  (ws-butler-global-mode +1))
+
+; Never use tabs to indent
+(setq-default indent-tabs-mode nil)
+
+; Show tabs
+(setq whitespace-style '(face tabs tab-mark))
+(setq-default global-whitespace-mode t)
+
+; show unicode whitespace
+(use-package unicode-whitespace
+  :config
+  (unicode-whitespace-setup 'subdued-faces)
+  :ensure t)
+
+; Show key bindings
+(use-package which-key
+  :ensure t)
+
+; fuzzy find
+(use-package fzf
+  :ensure t)
+
+; Missing dependency?
+(use-package json-mode
+  :ensure t)
+
+;; end of common config
+
+; C
+(add-hook 'c-mode-hook
+    (lambda ()
+        (font-lock-mode 1)
+        (set-variable 'c-basic-offset 2)))
+
+;;; Rust
+
+;; LSP mode
+(use-package lsp-mode
+  :init
+  ; paths and commands
+
+  ; For some totally bizzare reason, these options actually activate RLS
+  ;(setq lsp-rust-server "rust-analyzer")
+  ;(setq rustic-lsp-server "rust-analyzer")
+  ;(setq lsp-rust-analyzer-server-command "/home/dev/.rustup/toolchains/nightly-x86_64-unknown-linux-gnu/bin/rust-analyzer")
+  ;(setq lsp-rust-rustfmt-path "/home/dev/.rustup/toolchains/nightly-x86_64-unknown-linux-gnu/bin/rustfmt")
+
+  (setq lsp-rust-analyzer-cargo-watch-command "clippy")
+  (setq lsp-rust-cfg-test t)
+  ;(setq lsp-rust-analyzer-cargo-watch-args "+nightly")
+
+  ; completion and indentation
+  (setq lsp-auto-configure t)
+  (setq lsp-completion-enable t)
+  (setq lsp-enable-indentation t)
+  (setq lsp-enable-snippet t)
+
+  ;; show errors from entire project
+  ;; :project/:workspace/:file
+  (setq lsp-diagnostics-modeline-scope :project)
+  (setq lsp-modeline-diagnostics-scope :project)
+
+  ; inlays
+  (setq lsp-rust-analyzer-server-display-inlay-hints t)
+  (setq lsp-rust-analyzer-max-inlay-hint-length 25)
+  (setq lsp-rust-analyzer-display-chaining-hints t)
+  (setq lsp-rust-analyzer-display-parameter-hints t)
+
+  ; cargo watch
+  (setq lsp-rust-analyzer-cargo-watch-enable t)
+  ;(setq lsp-rust-analyzer-use-client-watching toggle client side watching
+  (setq lsp-rust-analyzer-cargo-all-targets t)
+  ;(setq lsp-rust-analyzer-exclude-globs a list of glob patterns for Cargo package exclusion
+
+  ;; too slow
+  ;(setq lsp-before-save-edits t)
+
+  :ensure t)
+
+(use-package lv
+  :ensure t)
+
+(use-package lsp-ui
+  :config
+  (setq lsp-ui-doc-delay 3)
+  (setq lsp-ui-doc-max-width 110)
+  (setq lsp-ui-doc-max-height 15)
+  :ensure t)
+
+(use-package treemacs
+  :ensure t)
+(use-package lsp-treemacs
+  :ensure t)
+
+;; Rust Mode
+(use-package rust-mode
+  :ensure t)
+; let LSP mode do format on save
+;(setq rust-format-on-save t)
+
+; activate LSP in rust mode
+(add-hook 'rust-mode-hook
+          (lambda ()
+            (lsp)
+            (lsp-rust-analyzer-inlay-hints-mode)
+            (lsp-completion-mode)
+            (company-mode)))
+
+; key bindings
+; compile
+(define-key rust-mode-map (kbd "C-c C-c") 'rust-run)
+(define-key rust-mode-map (kbd "C-c C-l") 'lsp-rust-analyzer-join-lines)
+(define-key rust-mode-map (kbd "C-c C-s") 'lsp-extend-selection)
+(define-key rust-mode-map (kbd "C-c C-m") 'lsp-rust-analyzer-expand-macro)
+; auto-import candidates
+(define-key rust-mode-map (kbd "C-c C-i") 'lsp-execute-code-action)
+
+(setq lsp-keymap-prefix "C-l")
+
+; managed mode
+(add-hook 'lsp-managed-mode-hook 'lsp-diagnostics-modeline-mode)
+
+; rustfmt and before-save
+(add-hook 'before-save-hook
+          (lambda () (when (eq 'rust-mode major-mode)
+                       (lsp-format-buffer))))
+
+; flycheck
+(use-package flycheck
+  :init
+  (global-flycheck-mode)
+  :config
+  (setq flycheck-rust-check-tests t)
+  :ensure t)
+
+; flycheck cargo integration
+(use-package flycheck-rust
+  :ensure t)
+; flycheck inline errors
+(use-package flycheck-inline
+  :ensure t)
+(add-hook 'flycheck-mode-hook
+          (lambda ()
+            (when (eq 'rust-mode major-mode)
+              (flycheck-rust-setup))))
+
+; company
+;(use-package company-lsp
+;  :ensure t)
+(use-package company
+  :ensure t)
+;(setq company-tooltip-align-annotations t)
+(define-key rust-mode-map (kbd "TAB") #'company-indent-or-complete-common)
+
+; snippets
+(use-package yasnippet
+  :ensure t)
+(yas-global-mode 1)
+(use-package yasnippet-classic-snippets
+  :ensure t)
+(use-package yasnippet-snippets
+  :ensure t)
+(setq-default yas-minor-mode t)
+
+; Show key bindings
+(with-eval-after-load 'lsp-mode
+  (add-hook 'lsp-mode-hook #'lsp-enable-which-key-integration))
+
+;; end of dev config
+
+;
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(flycheck-checker-error-threshold 1000)
+ '(package-selected-packages
+   '(yasnippet-snippets nix-haskell-mode jsonnet-mode json-mode nix-mode nixpkgs-fmt nixos-options nix-buffer ## auto-package-update yasnippet-classic-snippets ws-butler which-key use-package-ensure-system-package unicode-whitespace rust-mode restart-emacs lsp-ui flycheck-rust flycheck-inline company)))
+
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(lsp-ui-doc-background ((t (:background "black")))))
+
+(provide '.emacs)
+;;; .emacs ends here

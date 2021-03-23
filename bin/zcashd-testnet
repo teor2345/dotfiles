@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+IFS=$'\n\t'
+
+ZCASH_CMD="${0%-testnet}"
+ZCASH_CMD=$(basename "${ZCASH_CMD}")
+TESTNET_CONF="-conf=$HOME/.zcash-testnet/zcash.conf"
+
+#echo "" 1>&2
+#echo "$ZCASH_CMD" "$TESTNET_CONF" "$@" 1>&2
+#echo "" 1>&2
+
+"$ZCASH_CMD" "$TESTNET_CONF" "$@"

@@ -1,0 +1,48 @@
+[rerere]
+    enabled = true
+[push]
+    default = matching
+[user]
+    name = teor
+    email = teor@riseup.net
+[merge]
+    conflictstyle = diff3
+[rebase]
+    autoSquash = true
+    missingCommitsCheck = error
+[branch]
+    autosetupmerge = always
+[transfer]
+    fsckobjects = true
+[fetch]
+    fsckobjects = true
+[receive]
+    fsckObjects = true
+[tag]
+    forceSignAnnotated = true
+[log]
+    abbrevCommit = true
+[color]
+    branch = auto
+    diff = auto
+    grep = auto
+    interactive = auto
+    showBranch = auto
+    status = auto
+    ui = auto
+[diff]
+    renames = copy
+    algorithm = minimal
+    colorMoved = default
+    colorMovedWS = ignore-all-space
+    wsErrorHighlight = old,new
+[format]
+    signOff = true
+[am]
+    threeWay = true
+[checkout]
+    defaultRemote = gh-rw
+[pull]
+    ff = only
+[init]
+    defaultBranch = main

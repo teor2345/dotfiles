@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+
+set -u
+set -o pipefail
+IFS=$'\n\t'
+
+LOG_DIR=$(mktemp -d)
+RUSTC_LOG="$LOG_DIR/rustc.log"
+
+echo "Building $(git log -n1 --pretty=oneline), log in $RUSTC_LOG"
+cargo build 2>&1 | \
+    tee "$RUSTC_LOG"
+CARGO_STATUS=$?
+
+# Reset changes to Cargo.lock
+git reset --hard HEAD
+
+if [ "$CARGO_STATUS" -eq 0 ]; then
+    # Success
+    exit 0
+elif grep -q "reached the type-length limit" "$RUSTC_LOG"; then
+    # Failed due to type-length limit
+    exit 1
+else
+    # Failed for another reason
+    exit 125
+fi

@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+export RUST_BACKTRACE=${RUST_BACKTRACE:-full}
+export RUST_LIB_BACKTRACE=${RUST_LIB_BACKTRACE:-full}
+export COLORBT_SHOW_HIDDEN=${COLORBT_SHOW_HIDDEN:-0}
+
+#export RUST_LOG=${RUST_LOG:-warn}
+
+color="--color=always"
+
+if [ -t 1 ]; then
+   DATE="date --rfc-3339=seconds"
+else
+   DATE="true"
+fi
+
+$DATE
+
+# don't pass RUSTC_WRAPPER to clippy, it uses RUSTC_WORKSPACE_WRAPPER, and errors on RUSTC_WRAPPER
+pushd "${1:-.}" > /dev/null && \
+    RUSTC_WRAPPER="" cargo clippy --all-targets --all-features $color && \
+    cargo build $color && \
+    cargo test $color --message-format short --quiet && \
+popd > /dev/null && \
+    RUSTC_WRAPPER="" cargo clippy --all-targets --all-features $color && \
+    cargo build $color && \
+    cargo test $color --message-format short --quiet && \
+    cargo test $color --message-format short --quiet \
+          --manifest-path zebrad/Cargo.toml -- --ignored
+
+$DATE

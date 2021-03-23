@@ -1,0 +1,129 @@
+# if running bash
+if [ -n "$BASH_VERSION" ]; then
+    # include .bashrc if it exists
+    if [ -f "$HOME/.bashrc" ]; then
+        . "$HOME/.bashrc"
+    fi
+
+    # only in interactive bash shells
+    if [ ! -z "$PS1" ]; then
+        # search history when arrow keys are pressed,
+        # using entered text as a prefix
+        bind '"\e[A":history-search-backward'
+        bind '"\e[B":history-search-forward'
+    fi
+fi
+
+# set PATH so it includes the cargo bin directory, if it exists
+if [ -d "$HOME/.cargo/bin" ] ; then
+    PATH="$HOME/.cargo/bin:$PATH"
+fi
+
+# set PATH so it includes the rust runtime directory, if it exists
+# compansates for nightly paths cached by tmux
+if [ -d "/run/wrappers/bin" ] ; then
+    PATH="/run/wrappers/bin:$PATH"
+fi
+if [ -d "/run/current-system/sw/bin" ] ; then
+    PATH="/run/current-system/sw/bin:$PATH"
+fi
+
+# set PATH so it includes the rustup nightly directory, if it exists
+#if [ -d "$HOME/.rustup/toolchains/nightly-x86_64-unknown-linux-gnu/bin" ] ; then
+#    PATH="$HOME/.rustup/toolchains/nightly-x86_64-unknown-linux-gnu/bin:$PATH"
+#fi
+
+# set PATH so it includes user's private ~/bin, if it exists
+# this path should be set last, so it overrides everything
+if [ -d "$HOME/bin" ] ; then
+    PATH="$HOME/bin:$PATH"
+fi
+
+# editor
+# TODO: get the emacs config working for the dev user, not just root
+#alias emacs="emacsclient -c -nw -a="
+#export EDITOR="emacsclient -c -nw -a="
+#export VISUAL="emacsclient -c -nw -a="
+export EDITOR=emacs
+export VISUAL=emacs
+
+# development
+export SCCACHE_CACHE_SIZE=7.9G
+
+# nightly-2020-02-19 and later make sccache give this error on clippy jobs:
+# Compiler not supported: "error: Unrecognized option: \'E\'\n\n"
+#
+# just using RUSTC_WORKSPACE_WRAPPER seems to work
+export RUSTC_WRAPPER=""
+export RUSTC_WORKSPACE_WRAPPER="sccache"
+export CARGO_BUILD_JOBS=$(nproc);
+
+export CC="sccache gcc"
+export CXX="sccache g++"
+alias make="make -j$(nproc)"
+export MAKEFLAGS="j$(nproc) l$(nproc)";
+export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:q\
+uote=01'
+
+export RUST_BACKTRACE=1
+
+# destructive
+alias killall="killall -i"
+alias rm="rm -I"
+
+function topgrade ()
+{
+    PREV_DEFAULT_RUSTC=$(rustc --version)
+    PREV_STABLE_RUSTC=$(~/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/bin/rustc --version)
+    nix-shell cargo.nix --run "/run/current-system/sw/bin/topgrade $@"
+    NEW_DEFAULT_RUSTC=$(rustc --version)
+    NEW_STABLE_RUSTC=$(~/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/bin/rustc --version)
+    if [ "$NEW_DEFAULT_RUSTC" != "$PREV_DEFAULT_RUSTC" ]; then
+        echo "Upgraded default $PREV_DEFAULT_RUSTC to $NEW_DEFAULT_RUSTC."
+        echo "Clearing caches..."
+        rm -rf ~/.cache/sccache/* ~/.ccache/* ~/zebra/target/*
+    fi
+    if [ "$NEW_STABLE_RUSTC" != "$PREV_STABLE_RUSTC" ]; then
+        echo "Upgraded stable $PREV_STABLE_RUSTC to $NEW_STABLE_RUSTC"
+        echo "Rebuilding binaries..."
+        nix-shell cargo.nix --run "cargo install-update --all --force --downdate --git"
+    fi
+}
+
+# admin
+alias date="date --rfc-3339=seconds"
+alias df="df -h"
+alias glances="glances -t 10"
+alias htop="htop -d 100"
+alias top="top -d 10 -E g -i -H -1 -c"
+
+# Zcash
+alias zcashd="nice -n +20 zcashd"
+alias zcashd-testnet="nice -n +20 zcashd-testnet"
+
+# allow core dumps
+ulimit -c unlimited
+
+# don't allow disabling flow control
+stty -ixon
+
+# echo non-zero exit statuses
+EC() {
+    LAST_EXIT=${?-}
+    if [ ! -z "$LAST_EXIT" ]; then
+        echo -e "Exit $LAST_EXIT"
+    fi
+}
+trap EC ERR
+
+# show CWD or home directory hints on interactive which
+which () {
+    (alias; declare -f) | \
+        /usr/bin/env which --tty-only --read-alias --read-functions --show-tilde --show-dot $@
+}
+export -f which
+
+# make less more friendly for non-text input files, see lesspipe(1)
+[ /usr/bin/env which lesspipe.sh 1>/dev/null 2>/dev/null ] \
+    && eval "$(SHELL=/bin/sh lesspipe.sh)" \
+    || true

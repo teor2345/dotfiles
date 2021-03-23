@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+# Fallback script for rustfmt
+
+set -euo pipefail
+IFS=$'\n\t'
+
+# rustup-auto, nightly, stable
+
+"$HOME"/.cargo/bin/rustfmt "$@" || \
+    "$HOME"/.rustup/toolchains/nightly-x86_64-unknown-linux-gnu/bin/rustfmt "$@" || \
+    "$HOME"/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/bin/rustfmt "$@"

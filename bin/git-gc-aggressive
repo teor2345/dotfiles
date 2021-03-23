@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+IFS=$'\n\t'
+
+echo "Running git gc on '$1':"
+git -C "$1" gc --aggressive

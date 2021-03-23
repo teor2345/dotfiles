@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+IFS=$'\n\t'
+
+NETWORK="testnet"
+
+ZEBRA_CMD="${0%-$NETWORK}"
+CONF="$HOME/.config/zebra/zebrad-$NETWORK.toml"
+DATE=$(/usr/bin/env date --rfc-3339=seconds | cut -d'+' -f1 | tr ' :' '--')
+LOG_FILE="$HOME/.cache/zebra-log/zebrad-$NETWORK-$DATE.log"
+
+export RUST_BACKTRACE=full
+export RUST_LIB_BACKTRACE=full
+export COLORBT_SHOW_HIDDEN=1
+
+mkdir -p $(dirname "$LOG_FILE")
+
+echo "" 1>&2
+echo "$ZEBRA_CMD" "-c" "$CONF" "$@" "2>&1 |" \
+     "tee" "$LOG_FILE" "|" \
+     "rg -v -e TRACE -e DEBUG" 1>&2
+echo "" 1>&2
+
+"$ZEBRA_CMD" "-c" "$CONF" "$@" 2>&1 | \
+    tee "$LOG_FILE" | \
+    rg -v -e TRACE -e DEBUG

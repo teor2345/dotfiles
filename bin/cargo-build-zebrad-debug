@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+IFS=$'\n\t'
+
+CARGO_BUILD_BIN=${0%-debug}
+
+"$CARGO_BUILD_BIN" -Z unstable-options --profile dev

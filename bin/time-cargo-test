@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+IFS=$'\n\t'
+
+for d in zebra*; do
+    echo "$d"
+    pushd "$d" > /dev/null
+    # build without timing
+    cargo --quiet test --no-run
+    # time crate tests without output
+    time cargo --quiet test > /dev/null
+    popd > /dev/null
+    echo
+done

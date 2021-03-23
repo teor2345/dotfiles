@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+# Fallback script for rust-analyzer
+
+set -euo pipefail
+IFS=$'\n\t'
+
+# nightly, git version (via xtask install), stable
+
+"$HOME"/.rustup/toolchains/nightly-x86_64-unknown-linux-gnu/bin/rust-analyzer "$@" || \
+    "$HOME"/.cargo/bin/rust-analyzer "$@" || \
+    "$HOME"/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/bin/rust-analyzer "$@"
