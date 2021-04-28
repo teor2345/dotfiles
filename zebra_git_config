@@ -1,0 +1,24 @@
+[core]
+	repositoryformatversion = 0
+	filemode = true
+	bare = false
+	logallrefupdates = true
+[remote "origin"]
+	url = https://github.com/ZcashFoundation/zebra
+	fetch = +refs/heads/*:refs/remotes/origin/*
+	fetch = +refs/pull/*:refs/remotes/origin/pull/*
+[branch "main"]
+	remote = origin
+	merge = refs/heads/main
+[remote "oxarbitrage"]
+	url = https://github.com/oxarbitrage/zebra
+	fetch = +refs/heads/*:refs/remotes/ox/*
+[remote "teor2345"]
+	url = https://github.com/teor2345/zebra
+	fetch = +refs/heads/*:refs/remotes/gh/*
+[remote "preston-evans98"]
+	url = https://github.com/preston-evans98/zebra
+	fetch = +refs/heads/*:refs/remotes/prevans/*
+[remote "fanatid"]
+	url = https://github.com/fanatid/zebra.git
+	fetch = +refs/heads/*:refs/remotes/fa/*
