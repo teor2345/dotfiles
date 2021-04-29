@@ -10,15 +10,15 @@
 [branch "main"]
 	remote = origin
 	merge = refs/heads/main
-[remote "oxarbitrage"]
+[remote "ox"]
 	url = https://github.com/oxarbitrage/zebra
 	fetch = +refs/heads/*:refs/remotes/ox/*
-[remote "teor2345"]
+[remote "teor"]
 	url = https://github.com/teor2345/zebra
-	fetch = +refs/heads/*:refs/remotes/gh/*
+	fetch = +refs/heads/*:refs/remotes/teor2345/*
 [remote "preston-evans98"]
 	url = https://github.com/preston-evans98/zebra
-	fetch = +refs/heads/*:refs/remotes/prevans/*
+	fetch = +refs/heads/*:refs/remotes/preston-evans98/*
 [remote "fanatid"]
 	url = https://github.com/fanatid/zebra.git
-	fetch = +refs/heads/*:refs/remotes/fa/*
+	fetch = +refs/heads/*:refs/remotes/fanatid/*
