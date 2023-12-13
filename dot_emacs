@@ -4,10 +4,6 @@
 
 ;;; Code:
 
-;; initialize paradox
-(require 'paradox)
-(paradox-enable)
-
 ;(require 'package)
 ;(package-initialize)
 
@@ -31,8 +27,20 @@
 (use-package restart-emacs
   :ensure t)
 
+;; initialize paradox
+(use-package paradox
+  :ensure t
+  :init
+  (paradox-enable))
+
 ; Show column numbers
 (setq-default column-number-mode t)
+
+(use-package ace-window
+  :ensure t
+  :init
+)
+(global-set-key (kbd "C-x o") 'ace-window)
 
 ; Clean trailing whitespace, show it if it happens
 (setq-default show-trailing-whitespace t)
@@ -43,6 +51,7 @@
 
 ; Never use tabs to indent
 (setq-default indent-tabs-mode nil)
+
 
 ; Show tabs
 (setq whitespace-style '(face tabs tab-mark))
@@ -81,7 +90,9 @@
   :init
   ; paths and commands
 
-  ; For some totally bizzare reason, these options actually activate RLS
+  ; We might need to set these options until rustup includes a rust-analyzer proxy
+  ; But for some totally bizzare reason, these options actually activate RLS
+  ; So we just put rust-analyzer in the PATH instead
   ;(setq lsp-rust-server "rust-analyzer")
   ;(setq rustic-lsp-server "rust-analyzer")
   ;(setq lsp-rust-analyzer-server-command "/home/dev/.rustup/toolchains/nightly-x86_64-unknown-linux-gnu/bin/rust-analyzer")
@@ -159,6 +170,14 @@
 
 (setq lsp-keymap-prefix "C-l")
 
+; navigation
+(define-key lsp-ui-mode-map [remap xref-find-definitions] #'lsp-ui-peek-find-definitions)
+(define-key lsp-ui-mode-map [remap xref-find-references] #'lsp-ui-peek-find-references)
+
+;(lsp-ui-peek-find-workspace-symbol "pattern 0")
+;; If the server supports custom cross references
+;(lsp-ui-peek-find-custom 'base "$cquery/base")
+
 ; managed mode
 (add-hook 'lsp-managed-mode-hook 'lsp-diagnostics-modeline-mode)
 
@@ -218,7 +237,7 @@
  ;; If there is more than one, they won't work right.
  '(flycheck-checker-error-threshold 1000)
  '(package-selected-packages
-   '(yasnippet-snippets nix-haskell-mode jsonnet-mode json-mode nix-mode nixpkgs-fmt nixos-options nix-buffer ## auto-package-update yasnippet-classic-snippets ws-butler which-key use-package-ensure-system-package unicode-whitespace rust-mode restart-emacs lsp-ui flycheck-rust flycheck-inline company)))
+   '(use-package yasnippet-snippets nix-haskell-mode jsonnet-mode json-mode nix-mode nixpkgs-fmt nixos-options nix-buffer ## auto-package-update yasnippet-classic-snippets ws-butler which-key use-package-ensure-system-package unicode-whitespace rust-mode restart-emacs lsp-ui flycheck-rust flycheck-inline company)))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.

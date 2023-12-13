@@ -1,0 +1,27 @@
+/dev/md127:
+           Version : 0.90
+     Creation Time : Sat Sep 12 05:08:15 2020
+        Raid Level : raid1
+        Array Size : 2097088 (2047.94 MiB 2147.42 MB)
+     Used Dev Size : 2097088 (2047.94 MiB 2147.42 MB)
+      Raid Devices : 3
+     Total Devices : 3
+   Preferred Minor : 127
+       Persistence : Superblock is persistent
+
+       Update Time : Thu Feb 23 18:21:33 2023
+             State : clean 
+    Active Devices : 3
+   Working Devices : 3
+    Failed Devices : 0
+     Spare Devices : 0
+
+Consistency Policy : resync
+
+              UUID : 314c278e:1b11e543:b859f0f2:1a8f29b7
+            Events : 0.2206
+
+    Number   Major   Minor   RaidDevice State
+       0       8        3        0      active sync   /dev/sda3
+       1     259        4        1      active sync   /dev/nvme0n1p3
+       2     259       10        2      active sync   /dev/nvme1n1p3

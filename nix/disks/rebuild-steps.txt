@@ -1,0 +1,45 @@
+How to rebuild a failed disk:
+
+1. Run commands in partitions.txt (includes swap)
+   - if you're disabling a drive, run:
+       swapon --verbose
+       ls -l /dev/disk/by-id
+       swapoff <disk>
+2. To check, run:
+       partprobe
+       sgdisk -p <disks x 3>
+       swapon --verbose
+
+Mirror boot drive RAID:
+3. mdadm --manage /dev/md127 --add ${DISK_1}-part3
+   - if you're disabling a drive, run:
+       mdadm --misc --detail /dev/md127
+       mdadm --fail /dev/md127 <disk>
+       mdadm --remove /dev/md127 <disk>
+4. To check, run:
+   mdadm --misc --detail /dev/md127
+
+Mirror ZFS - order matters:
+5. zpool attach root-pool ${DISK_0}-part4 ${DISK_1}-part4
+   zpool attach data-pool ${DISK_0}-part6 ${DISK_1}-part6
+   - if you're disabling a drive:
+     a. close all processes and terminals using it
+     b. zpool detach <pool-name> <drive-name> for all pools and drives
+     c. optional: umount --force --recursive --lazy --verbose on all its mount paths
+     d. optional: zpool offline -f <pool-name> <drive-name>
+6. zpool status
+
+Fix NixOS configs:
+7. Update drive names in disk-dump.sh
+8. Update drive names in boot.nix
+   - if you're disabling a drive, comment it out
+9. nixos-generate-config (generates hardware-configuration.nix)
+   - if you're disabling a drive, comment out the swap in hardware-configuration.nix
+
+Deploy:
+10. nixos-rebuild switch
+   - if you're disabling a drive, do this to update /etc/fstab
+
+Document:
+11. Run disk-dump.sh
+   - if you're disabling a drive, do this in another directory

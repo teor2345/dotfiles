@@ -1,0 +1,67 @@
+#!/bin/sh
+
+URL=$1
+barename=`basename $1 | sed -e 's/\.git$//;' `
+
+if [ -e ~/git/"$barename.git" ] ; then
+   echo ~/git/$barename.git already exists: exiting.
+   exit 1
+fi
+
+echo "Cloning $URL to ~/git/$barename.git in 5"
+echo This script assumes that you are on Moria.
+
+sleep 5
+
+# Set up a ~/git directory, unless we already have one.
+echo mkdir -p ~/git
+mkdir -p ~/git || exit 1
+
+# cd into it.
+echo cd ~/git/
+cd ~/git/ || exit 1
+
+# Clone the base repository from git://foo into foo.git
+echo git clone --bare $URL $barename.git
+git clone --bare $URL $barename.git || exit 1
+
+# cd into the new repository.
+echo cd $barename.git
+cd $barename.git || exit 1
+
+cat > hooks/post-update <<EOF
+#!/bin/sh
+
+# Standard tor-project post-update script.
+
+/home/or/git-helpers/update-public-checkout "$@" 2>&1 >/dev/null & disown
+exec git-update-server-info
+EOF
+
+
+# Enable the post-update script that refreshes the index file that makes http
+# updates work.
+echo chmod +x hooks/post-update
+chmod +x hooks/post-update || exit 1
+
+# Do not allow any non-fast-forward branch updates: every new head must
+# be a strict descendant of the last head, and all merging needs to happen
+# on the user side before you push.
+echo git config receive.denyNonFastforwards true
+git config receive.denyNonFastforwards true || exit 1
+
+# Retain all reference changes
+echo git config core.logallrefupdates true
+git config core.logallrefupdates true || exit 1
+
+# Give the project a name that will be used by some of the hook scripts.
+echo git config hooks.projectname "$barename"
+git config hooks.projectname "$barename"
+
+# Mark this repo as okay for export via git://
+echo touch git-daemon-export-ok
+touch git-daemon-export-ok || exit 1
+
+echo ~/git/$barename.git is now set as a public-facing repo.
+echo For public access, use git://git.torproject.org/~$USER/git/$barename.git
+echo For push access, use ssh://$USER@moria.seul.org/~/git/$barename.git

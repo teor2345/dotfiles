@@ -1,0 +1,11 @@
+#!/bin/bash
+# this script should be sourced
+
+# ssh via smartcard
+eval $(gpg-agent --daemon)
+GPG_TTY=$(tty)
+export GPG_TTY
+if [ -f "${HOME}/.gpg-agent-info" ]; then
+   eval $(cat "${HOME}/.gpg-agent-info")
+   eval $(cut -d= -f 1 < "${HOME}/.gpg-agent-info" | xargs echo export)
+fi

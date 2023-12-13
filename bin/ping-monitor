@@ -1,0 +1,11 @@
+#!/bin/bash
+
+DEV_IP=${1:-192.168.215.111}
+
+while true; do
+    clear
+    if ! ping -c 1 "$DEV_IP" 2>&1 > /dev/null; then
+        ping -c 1 "$DEV_IP"
+    fi
+    sleep 10
+done

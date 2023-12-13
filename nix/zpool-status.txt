@@ -1,0 +1,46 @@
+  pool: backup-pool
+ state: ONLINE
+  scan: scrub repaired 0B in 00:04:35 with 0 errors on Sun Feb 19 02:04:45 2023
+config:
+
+	NAME                                                 STATE     READ WRITE CKSUM
+	backup-pool                                          ONLINE       0     0     0
+	  ata-Samsung_SSD_860_QVO_4TB_S4CXNF0N206602W-part4  ONLINE       0     0     0
+
+errors: No known data errors
+
+  pool: data-pool
+ state: ONLINE
+status: One or more devices is currently being resilvered.  The pool will
+	continue to function, possibly in a degraded state.
+action: Wait for the resilver to complete.
+  scan: resilver in progress since Thu Feb 23 18:15:46 2023
+	1.15T scanned at 3.36G/s, 89.0G issued at 260M/s, 1.15T total
+	89.5G resilvered, 7.55% done, 01:11:40 to go
+config:
+
+	NAME                                       STATE     READ WRITE CKSUM
+	data-pool                                  ONLINE       0     0     0
+	  mirror-0                                 ONLINE       0     0     0
+	    nvme-CT4000P3PSSD8_2236E6628157-part6  ONLINE       0     0     0
+	    nvme-CT4000P3PSSD8_2242E67C4B28-part6  ONLINE       0     0     0  (resilvering)
+
+errors: No known data errors
+
+  pool: root-pool
+ state: ONLINE
+status: One or more devices is currently being resilvered.  The pool will
+	continue to function, possibly in a degraded state.
+action: Wait for the resilver to complete.
+  scan: resilver in progress since Thu Feb 23 18:14:36 2023
+	145G scanned at 352M/s, 106G issued at 257M/s, 145G total
+	116G resilvered, 72.91% done, 00:02:36 to go
+config:
+
+	NAME                                       STATE     READ WRITE CKSUM
+	root-pool                                  ONLINE       0     0     0
+	  mirror-0                                 ONLINE       0     0     0
+	    nvme-CT4000P3PSSD8_2236E6628157-part4  ONLINE       0     0     0
+	    nvme-CT4000P3PSSD8_2242E67C4B28-part4  ONLINE       0     0     0  (resilvering)
+
+errors: No known data errors

@@ -2,9 +2,11 @@
     enabled = true
 [push]
     default = matching
+    gpgSign = if-asked
 [user]
     name = teor
     email = teor@riseup.net
+    signingkey = C8556CED5D90A0C529F64D43450CBA7F968F094B
 [merge]
     conflictstyle = diff3
 [rebase]
@@ -16,8 +18,16 @@
     fsckobjects = true
 [fetch]
     fsckobjects = true
+[fetch.fsck]
+    skipList = ~/.git_fsckskiplist
 [receive]
     fsckObjects = true
+[receive.fsck]
+    skipList = ~/.git_fsckskiplist
+[fsck]
+    skipList = ~/.git_fsckskiplist
+[commit]
+#    gpgsign = true
 [tag]
     forceSignAnnotated = true
 [log]
@@ -32,6 +42,7 @@
     ui = auto
 [diff]
     renames = copy
+    submodule = log
     algorithm = minimal
     colorMoved = default
     colorMovedWS = ignore-all-space
@@ -40,9 +51,20 @@
     signOff = true
 [am]
     threeWay = true
+[core]
+    excludesfile = ~/.gitignore_global
 [checkout]
-    defaultRemote = gh-rw
+	defaultRemote = origin
 [pull]
     ff = only
+#[remote "tor-github"]
+#    fetch = +refs/heads/*:refs/remotes/tor-github/*
+#    fetch = +refs/pull/*:refs/remotes/tor-github/pr/*
 [init]
     defaultBranch = main
+[submodule]
+    recurse = true
+[status]
+    submodulesummary = true
+[maintenance]
+	repo = /Users/hyper/dev/zebra

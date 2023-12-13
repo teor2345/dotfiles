@@ -1,0 +1,63 @@
+# align most partitions to 1 GB boundaries
+
+DISK_1=/dev/disk/by-id/nvme-CT4000P3PSSD8_2242E67C4B28
+sgdisk --zap-all $DISK_1
+# boot loader - BIOS
+sgdisk -a1 -n1:24K:+1000K   -t1:EF02 $DISK_1
+# boot loader - UEFI
+sgdisk     -n2:0:+1023M     -t2:EF00 $DISK_1
+# boot - ext4 RAID mirrored * 3
+sgdisk     -n3:0:+2G        -t3:FD00 $DISK_1
+
+# root pool - ZFS mirrored * 2
+sgdisk     -n4:0:+256G      -t4:BF00 $DISK_1
+# swap - striped * 2, in addition to compressed RAM
+# 1/2 of RAM each, across 2 disks
+sgdisk     -n5:0:+64G       -t5:8200 $DISK_1
+partprobe
+mkswap -L swap1 $DISK_1-part5
+swapon --discard --priority 0 $DISK_1-part5
+nixos-generate-config
+
+# data pool - ZFS mirrored * 2 - 90% of SSD to improve performance and wear
+# leaves ~307 GB unallocated
+sgdisk     -n6:0:+3096G     -t6:BF00 $DISK_1
+partprobe
+
+DISK_0=/dev/disk/by-id/nvme-CT4000P3PSSD8_2236E6628157
+sgdisk --zap-all $DISK_0
+# boot loader - BIOS
+sgdisk -a1 -n1:24K:+1000K   -t1:EF02 $DISK_0
+# boot loader - UEFI
+sgdisk     -n2:0:+1023M     -t2:EF00 $DISK_0
+# boot - ext4 RAID mirrorred * 3
+sgdisk     -n3:0:+2G        -t3:FD00 $DISK_0
+
+# root pool - ZFS mirrored * 2
+sgdisk     -n4:0:+256G      -t4:BF00 $DISK_0
+# swap - striped * 2, in addition to compressed RAM
+# 1/2 of RAM each, across 2 disks
+sgdisk     -n5:0:+64G       -t5:8200 $DISK_0
+partprobe
+mkswap -L swap0 $DISK_0-part5
+swapon --discard --priority 0 $DISK_0-part5
+nixos-generate-config
+
+# data pool - ZFS mirrored * 2 - 90% of SSD to improve performance and wear
+# leaves ~307 GB unallocated
+sgdisk     -n6:0:+3096G     -t6:BF00 $DISK_0
+partprobe
+
+
+DISK_SLOW=/dev/disk/by-id/ata-Samsung_SSD_860_QVO_4TB_S4CXNF0N206602W
+sgdisk --zap-all $DISK_SLOW
+# boot loader - BIOS
+sgdisk -a1 -n1:24K:+1000K   -t1:EF02 $DISK_SLOW
+# boot loader - UEFI
+sgdisk     -n2:0:+1023M     -t2:EF00 $DISK_SLOW
+# boot - ext4 RAID mirrored * 3
+sgdisk     -n3:0:+2G        -t3:FD00 $DISK_SLOW
+
+# backup pool - ZFS - 80% of SSD to improve performance and wear
+sgdisk     -n4:0:+3686G     -t4:BF00 $DISK_SLOW
+partprobe

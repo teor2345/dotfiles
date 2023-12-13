@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+if [ "$#" -ge 1 ]; then
+    BRANCH_NAME="${@: -1}"
+    PUSH_ARGS="${@:1:$#-1}"
+    shift
+else
+    echo "Usage: $0 [push-args... ] branch-name"
+fi
+
+git fetch dev
+git push $PUSH_ARGS gh-rw dev/"$BRANCH_NAME":refs/heads/"$BRANCH_NAME"

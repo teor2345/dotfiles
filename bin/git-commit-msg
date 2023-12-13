@@ -1,0 +1,10 @@
+#!/bin/sh
+
+GIT_MSG=`git-msg`
+
+if [ "$?" != 0 ]; then
+  echo "Finding git message failed: $GIT_MSG"
+  exit 1
+fi
+
+git commit -m "$GIT_MSG" "$@"

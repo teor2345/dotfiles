@@ -7,4 +7,4 @@ if [ $# -ge 1 ]; then
 fi
 
 find "$FIND_PATH" -name .git -a -type d | xargs -n 1 dirname \
-    | xargs -n 1 ~/bin/git-gc-aggressive
+    | xargs -n 1 ~/bin/git-fetch-all-dir

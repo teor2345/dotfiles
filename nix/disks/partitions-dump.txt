@@ -1,0 +1,86 @@
+Disk /dev/disk/by-id/nvme-CT4000P3PSSD8_2242E67C4B28: 7814037168 sectors, 3.6 TiB
+Sector size (logical/physical): 512/512 bytes
+Disk identifier (GUID): 0B593101-896D-47AC-91C0-89AD0B9783CF
+Partition table holds up to 128 entries
+Main partition table begins at sector 2 and ends at sector 33
+First usable sector is 34, last usable sector is 7814037134
+Partitions will be aligned on 16-sector boundaries
+Total free space is 643874461 sectors (307.0 GiB)
+
+Number  Start (sector)    End (sector)  Size       Code  Name
+   1              48            2047   1000.0 KiB  EF02  
+   2            2048         2097151   1023.0 MiB  EF00  
+   3         2097152         6291455   2.0 GiB     FD00  
+   4         6291456       543162367   256.0 GiB   BF00  
+   5       543162368       677380095   64.0 GiB    8200  
+   6       677380096      7170162687   3.0 TiB     BF00  
+label: gpt
+label-id: 0B593101-896D-47AC-91C0-89AD0B9783CF
+device: /dev/disk/by-id/nvme-CT4000P3PSSD8_2242E67C4B28
+unit: sectors
+first-lba: 34
+last-lba: 7814037134
+sector-size: 512
+
+/dev/disk/by-id/nvme-CT4000P3PSSD8_2242E67C4B28-part1 : start=          48, size=        2000, type=21686148-6449-6E6F-744E-656564454649, uuid=990E00D8-5274-493D-A125-DF8B854F1285
+/dev/disk/by-id/nvme-CT4000P3PSSD8_2242E67C4B28-part2 : start=        2048, size=     2095104, type=C12A7328-F81F-11D2-BA4B-00A0C93EC93B, uuid=97AEAA2A-9C17-405E-A8E4-F89466F94CDA
+/dev/disk/by-id/nvme-CT4000P3PSSD8_2242E67C4B28-part3 : start=     2097152, size=     4194304, type=A19D880F-05FC-4D3B-A006-743F0F84911E, uuid=BEB9BEA4-54CD-4A1B-A648-98D5608873F2
+/dev/disk/by-id/nvme-CT4000P3PSSD8_2242E67C4B28-part4 : start=     6291456, size=   536870912, type=6A85CF4D-1DD2-11B2-99A6-080020736631, uuid=6FD6EC69-C097-405A-8EA5-2D4B506EC294
+/dev/disk/by-id/nvme-CT4000P3PSSD8_2242E67C4B28-part5 : start=   543162368, size=   134217728, type=0657FD6D-A4AB-43C4-84E5-0933C84B4F4F, uuid=B21ED854-2198-4BC7-AAE0-7B617DFC7DAF
+/dev/disk/by-id/nvme-CT4000P3PSSD8_2242E67C4B28-part6 : start=   677380096, size=  6492782592, type=6A85CF4D-1DD2-11B2-99A6-080020736631, uuid=B7562B7D-9EAC-4BC8-9B19-FF2CE47E790F
+Disk /dev/disk/by-id/nvme-CT4000P3PSSD8_2236E6628157: 7814037168 sectors, 3.6 TiB
+Sector size (logical/physical): 512/512 bytes
+Disk identifier (GUID): 81C07098-C63F-48F0-A98C-DCE767A5E5E9
+Partition table holds up to 128 entries
+Main partition table begins at sector 2 and ends at sector 33
+First usable sector is 34, last usable sector is 7814037134
+Partitions will be aligned on 16-sector boundaries
+Total free space is 643874461 sectors (307.0 GiB)
+
+Number  Start (sector)    End (sector)  Size       Code  Name
+   1              48            2047   1000.0 KiB  EF02  
+   2            2048         2097151   1023.0 MiB  EF00  
+   3         2097152         6291455   2.0 GiB     FD00  
+   4         6291456       543162367   256.0 GiB   BF00  
+   5       543162368       677380095   64.0 GiB    8200  
+   6       677380096      7170162687   3.0 TiB     BF00  
+label: gpt
+label-id: 81C07098-C63F-48F0-A98C-DCE767A5E5E9
+device: /dev/disk/by-id/nvme-CT4000P3PSSD8_2236E6628157
+unit: sectors
+first-lba: 34
+last-lba: 7814037134
+sector-size: 512
+
+/dev/disk/by-id/nvme-CT4000P3PSSD8_2236E6628157-part1 : start=          48, size=        2000, type=21686148-6449-6E6F-744E-656564454649, uuid=42E80A16-DF60-4C4C-A679-90B4822C3938
+/dev/disk/by-id/nvme-CT4000P3PSSD8_2236E6628157-part2 : start=        2048, size=     2095104, type=C12A7328-F81F-11D2-BA4B-00A0C93EC93B, uuid=0FD98627-CB80-4AC8-AFAE-DA4B93D253F4
+/dev/disk/by-id/nvme-CT4000P3PSSD8_2236E6628157-part3 : start=     2097152, size=     4194304, type=A19D880F-05FC-4D3B-A006-743F0F84911E, uuid=2D4A88B0-E776-4371-B1D1-AC76B5A880C1
+/dev/disk/by-id/nvme-CT4000P3PSSD8_2236E6628157-part4 : start=     6291456, size=   536870912, type=6A85CF4D-1DD2-11B2-99A6-080020736631, uuid=E64268BE-824A-4024-AA22-326A3F27C721
+/dev/disk/by-id/nvme-CT4000P3PSSD8_2236E6628157-part5 : start=   543162368, size=   134217728, type=0657FD6D-A4AB-43C4-84E5-0933C84B4F4F, uuid=53D13CDF-8FFD-4BAB-8480-5697ABC2D374
+/dev/disk/by-id/nvme-CT4000P3PSSD8_2236E6628157-part6 : start=   677380096, size=  6492782592, type=6A85CF4D-1DD2-11B2-99A6-080020736631, uuid=BBBB487E-D673-4C5F-929C-28C4FC32C97D
+Disk /dev/disk/by-id/ata-Samsung_SSD_860_QVO_4TB_S4CXNF0N206602W: 7814037168 sectors, 3.6 TiB
+Sector size (logical/physical): 512/512 bytes
+Disk identifier (GUID): CD58A479-F341-4B31-9A9B-39D7FF415274
+Partition table holds up to 128 entries
+Main partition table begins at sector 2 and ends at sector 33
+First usable sector is 34, last usable sector is 7814037134
+Partitions will be aligned on 16-sector boundaries
+Total free space is 77643421 sectors (37.0 GiB)
+
+Number  Start (sector)    End (sector)  Size       Code  Name
+   1              48            2047   1000.0 KiB  EF02  
+   2            2048         2097151   1023.0 MiB  EF00  
+   3         2097152         6291455   2.0 GiB     FD00  
+   4         6291456      7736393727   3.6 TiB     BF00  
+label: gpt
+label-id: CD58A479-F341-4B31-9A9B-39D7FF415274
+device: /dev/disk/by-id/ata-Samsung_SSD_860_QVO_4TB_S4CXNF0N206602W
+unit: sectors
+first-lba: 34
+last-lba: 7814037134
+sector-size: 512
+
+/dev/disk/by-id/ata-Samsung_SSD_860_QVO_4TB_S4CXNF0N206602W-part1 : start=          48, size=        2000, type=21686148-6449-6E6F-744E-656564454649, uuid=905A16C4-35AD-48EB-8E2E-944D39A5D359
+/dev/disk/by-id/ata-Samsung_SSD_860_QVO_4TB_S4CXNF0N206602W-part2 : start=        2048, size=     2095104, type=C12A7328-F81F-11D2-BA4B-00A0C93EC93B, uuid=D3A80C97-C231-40CB-91B1-BC3CF95C5E04
+/dev/disk/by-id/ata-Samsung_SSD_860_QVO_4TB_S4CXNF0N206602W-part3 : start=     2097152, size=     4194304, type=A19D880F-05FC-4D3B-A006-743F0F84911E, uuid=016D750B-60B5-4CDE-A06B-B1E1E4C942B6
+/dev/disk/by-id/ata-Samsung_SSD_860_QVO_4TB_S4CXNF0N206602W-part4 : start=     6291456, size=  7730102272, type=6A85CF4D-1DD2-11B2-99A6-080020736631, uuid=4A26DEC1-C297-406A-8704-EBB2BC262F9E

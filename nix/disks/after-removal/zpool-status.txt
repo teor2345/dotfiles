@@ -1,0 +1,32 @@
+  pool: backup-pool
+ state: ONLINE
+  scan: scrub repaired 0B in 00:04:35 with 0 errors on Sun Feb 19 02:04:45 2023
+config:
+
+	NAME                                                 STATE     READ WRITE CKSUM
+	backup-pool                                          ONLINE       0     0     0
+	  ata-Samsung_SSD_860_QVO_4TB_S4CXNF0N206602W-part4  ONLINE       0     0     0
+
+errors: No known data errors
+
+  pool: data-pool
+ state: ONLINE
+  scan: scrub repaired 0B in 01:24:45 with 0 errors on Sun Feb 19 03:24:56 2023
+config:
+
+	NAME                                     STATE     READ WRITE CKSUM
+	data-pool                                ONLINE       0     0     0
+	  nvme-CT4000P3PSSD8_2236E6628157-part6  ONLINE       0     0     0
+
+errors: No known data errors
+
+  pool: root-pool
+ state: ONLINE
+  scan: scrub repaired 0B in 00:14:17 with 0 errors on Sun Feb 19 02:14:30 2023
+config:
+
+	NAME                                     STATE     READ WRITE CKSUM
+	root-pool                                ONLINE       0     0     0
+	  nvme-CT4000P3PSSD8_2236E6628157-part4  ONLINE       0     0     0
+
+errors: No known data errors

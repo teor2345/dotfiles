@@ -1,0 +1,26 @@
+#!/bin/sh
+
+# Find the git directory
+GITROOT="$PWD"
+#echo "Checking for $GITROOT/.git"
+while [ ! -e "$GITROOT/.git" ]; do
+    GITROOT=`dirname "$GITROOT"`
+    #echo "Checking for $GITROOT/.git"
+    if [ -z "$GITROOT" -o "$GITROOT" = "/" ]; then
+        echo "Couldn't find .git in current directory $PWD or any parent."
+        exit 1
+    fi
+done
+
+# handle worktrees
+GITDIR="$GITROOT/.git"
+if [ -f "$GITDIR" ]; then
+    GITDIR=`cat "$GITDIR" | grep "gitdir:" | cut -d":" -f2- | tr -d " "`
+fi
+
+if [ ! -d "$GITDIR" ]; then
+    echo "Not a directory: $GITDIR"
+    exit 1
+fi
+
+cat $GITDIR/COMMIT_EDITMSG | grep -v '^#'

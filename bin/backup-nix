@@ -1,0 +1,45 @@
+#!/bin/bash
+
+DEV_IP=${1:-192.168.18.111}
+
+SSH="-e ssh --timeout=12"
+
+while true; do
+    rsync $SSH -rltc --max-size=100k --progress root@${DEV_IP}:/etc/nixos ~/Documents/ --exclude nixpkgs
+    rsync $SSH -rltc --progress root@${DEV_IP}:/nix/var/nix/profiles ~/Documents/nix-var-nix-profiles
+    rsync $SSH -ltc --progress root@${DEV_IP}:/etc/nix/nix.conf ~/Documents/
+    rsync $SSH -ltc --progress root@${DEV_IP}:/etc/nix/registry.json ~/Documents/
+    rsync $SSH -ltc --progress root@${DEV_IP}:/var/cron ~/Documents/
+
+    mkdir -p ~/Documents/root
+    rsync $SSH -rltc --max-size=100k --progress root@${DEV_IP}:bin ~/Documents/root/
+    rsync $SSH -ltc --progress root@${DEV_IP}:.profile ~/Documents/root/dot_profile
+    rsync $SSH -ltc --progress root@${DEV_IP}:.bashrc ~/Documents/root/dot_bashrc
+    rsync $SSH -ltc --progress root@${DEV_IP}:.emacs ~/Documents/root/dot_emacs
+    rsync $SSH -ltc --progress root@${DEV_IP}:.tmux.conf ~/Documents/root/dot_tmux.conf
+    rsync $SSH -rltc --progress root@${DEV_IP}:.config/ ~/Documents/root/dot_config
+
+    mkdir -p ~/Documents/dev
+    rsync $SSH -rltc --max-size=100k --progress dev@${DEV_IP}:bin ~/Documents/dev/
+    rsync $SSH -ltc --progress dev@${DEV_IP}:.profile ~/Documents/dev/dot_profile
+    rsync $SSH -ltc --progress dev@${DEV_IP}:.bashrc ~/Documents/dev/dot_bashrc
+
+    rsync $SSH -ltc --progress dev@${DEV_IP}:.emacs ~/Documents/dev/dot_emacs
+    rsync $SSH -ltc --progress dev@${DEV_IP}:.tmux.conf ~/Documents/dev/dot_tmux.conf
+
+    rsync $SSH -ltc --progress dev@${DEV_IP}:.cargo/config.toml ~/Documents/dev/dot_cargo_config.toml
+    rsync $SSH -ltc --progress dev@${DEV_IP}:.cargo/.crates.toml ~/Documents/dev/dot_cargo_dot_crates.toml
+    rsync $SSH -ltc --progress dev@${DEV_IP}:.cargo/.crates2.json ~/Documents/dev/dot_cargo_dot_crates2.json
+    rsync $SSH -ltc --progress dev@${DEV_IP}:.gitconfig ~/Documents/dev/dot_gitconfig
+    rsync $SSH -rltc --progress dev@${DEV_IP}:.config/ ~/Documents/dev/dot_config
+
+    rsync $SSH -ltc --progress dev@${DEV_IP}:*.nix ~/Documents/dev/
+    rsync $SSH -ltc --progress dev@${DEV_IP}:rust-toolchain ~/Documents/dev/
+    rsync $SSH -ltc --progress dev@${DEV_IP}:zebra/shell.nix ~/Documents/dev/zebra.nix
+    rsync $SSH -ltc --progress dev@${DEV_IP}:zcash/shell.nix ~/Documents/dev/zcashd.nix
+
+    rsync $SSH -ltc --max-size=100k --progress dev@${DEV_IP}:zebra/.git/config ~/Documents/dev/zebra_git_config
+
+    date
+    sleep 120
+done

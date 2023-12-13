@@ -1,0 +1,64 @@
+Disk /dev/disk/by-id/nvme-XPG_SPECTRIX_S40G_2J4520139990: 4000797360 sectors, 1.9 TiB
+Sector size (logical/physical): 512/512 bytes
+Disk identifier (GUID): 315DAD85-7813-420D-A16E-99C1A09B04EC
+Partition table holds up to 128 entries
+Main partition table begins at sector 2 and ends at sector 33
+First usable sector is 34, last usable sector is 4000797326
+Partitions will be aligned on 16-sector boundaries
+Total free space is 437736093 sectors (208.7 GiB)
+
+Number  Start (sector)    End (sector)  Size       Code  Name
+   1              48            2047   1000.0 KiB  EF02  
+   2            2048         2097151   1023.0 MiB  EF00  
+   3         2097152         6291455   2.0 GiB     FD00  
+   4         6291456       274726911   128.0 GiB   BF00  
+   5       274726912       341835775   32.0 GiB    8200  
+   7       341835776      2489319423   1024.0 GiB  BF00  
+   8      2489319424      3563061247   512.0 GiB   BF00  
+label: gpt
+label-id: 315DAD85-7813-420D-A16E-99C1A09B04EC
+device: /dev/disk/by-id/nvme-XPG_SPECTRIX_S40G_2J4520139990
+unit: sectors
+first-lba: 34
+last-lba: 4000797326
+sector-size: 512
+
+/dev/disk/by-id/nvme-XPG_SPECTRIX_S40G_2J4520139990-part1 : start=          48, size=        2000, type=21686148-6449-6E6F-744E-656564454649, uuid=B57822CF-A492-42CC-A3A1-C936E274FD12
+/dev/disk/by-id/nvme-XPG_SPECTRIX_S40G_2J4520139990-part2 : start=        2048, size=     2095104, type=C12A7328-F81F-11D2-BA4B-00A0C93EC93B, uuid=6B5C998F-F549-457C-A097-8C9429790A82
+/dev/disk/by-id/nvme-XPG_SPECTRIX_S40G_2J4520139990-part3 : start=     2097152, size=     4194304, type=A19D880F-05FC-4D3B-A006-743F0F84911E, uuid=17402BF4-3DC6-4A41-8871-531A7D51F75E
+/dev/disk/by-id/nvme-XPG_SPECTRIX_S40G_2J4520139990-part4 : start=     6291456, size=   268435456, type=6A85CF4D-1DD2-11B2-99A6-080020736631, uuid=15CC77AB-AFB8-4CDC-BE05-98EC95CC7F39
+/dev/disk/by-id/nvme-XPG_SPECTRIX_S40G_2J4520139990-part5 : start=   274726912, size=    67108864, type=0657FD6D-A4AB-43C4-84E5-0933C84B4F4F, uuid=7787E742-FEC9-477A-8880-6DA1431F04C3
+/dev/disk/by-id/nvme-XPG_SPECTRIX_S40G_2J4520139990-part7 : start=   341835776, size=  2147483648, type=6A85CF4D-1DD2-11B2-99A6-080020736631, uuid=446A42C1-3EBD-4A48-8AF9-964F3341C4BA
+/dev/disk/by-id/nvme-XPG_SPECTRIX_S40G_2J4520139990-part8 : start=  2489319424, size=  1073741824, type=6A85CF4D-1DD2-11B2-99A6-080020736631, uuid=AD859242-39FF-4016-89F0-2770760C65CA
+Disk /dev/disk/by-id/nvme-Samsung_SSD_970_EVO_Plus_2TB_S4J4NG0M704524K: 3907029168 sectors, 1.8 TiB
+Sector size (logical/physical): 512/512 bytes
+Disk identifier (GUID): 63521FB3-9C28-4145-BBF0-8B29603B8E16
+Partition table holds up to 128 entries
+Main partition table begins at sector 2 and ends at sector 33
+First usable sector is 34, last usable sector is 3907029134
+Partitions will be aligned on 16-sector boundaries
+Total free space is 343967901 sectors (164.0 GiB)
+
+Number  Start (sector)    End (sector)  Size       Code  Name
+   1              48            2047   1000.0 KiB  EF02  
+   2            2048         2097151   1023.0 MiB  EF00  
+   3         2097152         6291455   2.0 GiB     FD00  
+   4         6291456       274726911   128.0 GiB   BF00  
+   5       274726912       341835775   32.0 GiB    8200  
+   6       341835776      1415577599   512.0 GiB   BF00  
+   7      1415577600      3563061247   1024.0 GiB  BF00  
+label: gpt
+label-id: 63521FB3-9C28-4145-BBF0-8B29603B8E16
+device: /dev/disk/by-id/nvme-Samsung_SSD_970_EVO_Plus_2TB_S4J4NG0M704524K
+unit: sectors
+first-lba: 34
+last-lba: 3907029134
+sector-size: 512
+
+/dev/disk/by-id/nvme-Samsung_SSD_970_EVO_Plus_2TB_S4J4NG0M704524K-part1 : start=          48, size=        2000, type=21686148-6449-6E6F-744E-656564454649, uuid=65FC309F-6F74-4D4A-ABD7-A790B54DD946
+/dev/disk/by-id/nvme-Samsung_SSD_970_EVO_Plus_2TB_S4J4NG0M704524K-part2 : start=        2048, size=     2095104, type=C12A7328-F81F-11D2-BA4B-00A0C93EC93B, uuid=D0898EAB-017D-46B0-859A-1DB4876825B0
+/dev/disk/by-id/nvme-Samsung_SSD_970_EVO_Plus_2TB_S4J4NG0M704524K-part3 : start=     2097152, size=     4194304, type=A19D880F-05FC-4D3B-A006-743F0F84911E, uuid=9C39E0AF-ECFB-424C-973F-885DDA50BA72
+/dev/disk/by-id/nvme-Samsung_SSD_970_EVO_Plus_2TB_S4J4NG0M704524K-part4 : start=     6291456, size=   268435456, type=6A85CF4D-1DD2-11B2-99A6-080020736631, uuid=539A452D-709B-4A7D-9634-E909B8983EEC
+/dev/disk/by-id/nvme-Samsung_SSD_970_EVO_Plus_2TB_S4J4NG0M704524K-part5 : start=   274726912, size=    67108864, type=0657FD6D-A4AB-43C4-84E5-0933C84B4F4F, uuid=A362875C-CF36-4890-99F8-DE6E4594D5D2
+/dev/disk/by-id/nvme-Samsung_SSD_970_EVO_Plus_2TB_S4J4NG0M704524K-part6 : start=   341835776, size=  1073741824, type=6A85CF4D-1DD2-11B2-99A6-080020736631, uuid=5744A252-C1D6-4804-8229-083AF3F256BA
+/dev/disk/by-id/nvme-Samsung_SSD_970_EVO_Plus_2TB_S4J4NG0M704524K-part7 : start=  1415577600, size=  2147483648, type=6A85CF4D-1DD2-11B2-99A6-080020736631, uuid=5E20E27C-0905-4863-A484-CCCDC5B0C561

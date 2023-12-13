@@ -1,0 +1,36 @@
+# This is a generated file.  Do not edit!
+#
+# To make changes, edit the fileSystems and swapDevices NixOS options
+# in your /etc/nixos/configuration.nix file.
+#
+# <file system> <mount point>   <type>  <options>       <dump>  <pass>
+
+# Filesystems.
+root-pool/system/root / zfs defaults 0 0
+/dev/disk/by-uuid/a6e57657-1add-4436-a8df-2526ada4f6e5 /boot ext4 defaults 0 2
+root-pool/system/etc /etc zfs defaults 0 0
+root-pool/user/home /home zfs defaults 0 0
+root-pool/user/home/dev /home/dev zfs defaults 0 0
+data-pool/user/cache-data/dev/cache /home/dev/.cache zfs nofail 0 0
+tmpfs /home/dev/.cache/sccache tmpfs uid=dev,gid=users,size=8G,nr_inodes=256k,mode=755,nofail 0 0
+data-pool/user/zebra/dev/state /home/dev/.cache/zebra-custom/state zfs nofail 0 0
+tmpfs /home/dev/.ccache tmpfs uid=dev,gid=users,size=8G,nr_inodes=256k,mode=755,nofail 0 0
+data-pool/user/zcashd/dev/testnet/blocks /home/dev/.zcash-testnet/testnet3/blocks zfs nofail 0 0
+data-pool/user/zcashd/dev/testnet/chainstate /home/dev/.zcash-testnet/testnet3/chainstate zfs nofail 0 0
+data-pool/user/zcashd/dev/mainnet/blocks /home/dev/.zcash/blocks zfs nofail 0 0
+data-pool/user/zcashd/dev/mainnet/chainstate /home/dev/.zcash/chainstate zfs nofail 0 0
+tmpfs /home/dev/zebra/target tmpfs uid=dev,gid=users,size=112G,nr_inodes=256k,mode=755,nofail 0 0
+root-pool/local/nix /nix zfs defaults 0 0
+tmpfs /tmp tmpfs size=10%,nr_inodes=16k,nofail 0 0
+root-pool/system/var /var zfs defaults 0 0
+data-pool/docker /var/lib/docker zfs defaults 0 0
+tmpfs /var/tmp tmpfs nofail 0 0
+
+
+# Swap devices.
+/dev/disk/by-label/swap0 none swap nofail,discard,pri=0
+/dev/disk/by-label/swap1 none swap nofail,discard,pri=0
+/dev/disk/by-uuid/c3d87297-3c80-430a-8ff1-753ea16eda0c none swap defaults
+/dev/disk/by-uuid/42cc12b3-e633-421e-b180-d7ebd9b77574 none swap defaults
+/dev/zram0 none swap defaults,pri=5
+

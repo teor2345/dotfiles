@@ -1,0 +1,306 @@
+# boot
+
+# TODO: upgrade to --metadata=default ?
+mdadm --create /dev/md127 --metadata=0.90 --level=1 --raid-devices=2 ${DISK_1}-part3 ${DISK_SLOW}-part3
+
+# add second fast drive
+mdadm --grow /dev/md127 --raid-devices=3 --add ${DISK_0}-part3
+# replace removed drive
+mdadm --manage /dev/md127 --add ${DISK_0}-part3
+
+mkfs.ext4 -m 0 -L boot -j /dev/md127
+
+mkdir /mnt/boot
+mount /dev/md127 /mnt/boot
+
+# swap
+
+swapon --discard --priority 0 ${DISK_1}-part5
+swapon --discard --priority 0 ${DISK_0}-part5
+
+# zfs base
+
+zpool create \
+    -o ashift=13 \
+    -o autoexpand=on \
+    -o feature@async_destroy=enabled \
+    -o feature@bookmarks=enabled \
+    -o feature@embedded_data=enabled \
+    -o feature@empty_bpobj=enabled \
+    -o feature@enabled_txg=enabled \
+    -o feature@extensible_dataset=enabled \
+    -o feature@filesystem_limits=enabled \
+    -o feature@hole_birth=enabled \
+    -o feature@large_blocks=enabled \
+    -o feature@lz4_compress=enabled \
+    -o feature@spacemap_histogram=enabled \
+    -o feature@zpool_checkpoint=enabled \
+    -O acltype=posixacl -O compression=lz4 \
+    -O atime=off -O xattr=sa \
+    -O mountpoint=none \
+    -O canmount=off \
+-o autotrim=off \
+-o feature@resilver_defer=enabled \
+-o feature@device_removal=enabled \
+-o feature@obsolete_counts=enabled \
+-o feature@spacemap_v2=enabled \
+-o feature@edonr=enabled \
+-o feature@skein=enabled \
+-o feature@large_dnode=enabled  \
+-O dnodesize=auto  \
+-O redundant_metadata=most \
+
+# roots
+
+-O checksum=skein \
+-O devices=on \
+
+# root-pool
+
+-R /mnt \
+root-pool \
+${DISK_1}-part4
+
+# upgrade to mirror from existing drive
+# the order of the disks matters
+#zpool attach root-pool ${DISK_1}-part4 ${DISK_0}-part4
+
+# create mirror
+# zpool create ... mirror ${DISK_1}-part4 ${DISK_0}-part4
+
+# add stripe to existing drive
+# zpool add data-pool ${DISK_0}-part6
+# create stripe
+# ... ${DISK_1}-part6 ${DISK_0}-part6
+
+# copy an existing pool to a new pool with an incompatible shape
+#zfs create root-pool-2 ...
+#zfs snapshot -r root-pool@send
+#zfs send --replicate --verbose --large-block --embed --compressed --skip-missing root-pool@send | zfs receive -d -F -s root-pool-2
+
+
+  # local
+
+  zfs create root-pool/local \
+      -o mountpoint=none \
+      -o canmount=off \
+      -o devices=off \
+#      -o com.sun:auto-snapshot=false
+
+  zfs create root-pool/local/nix \
+      -o mountpoint=legacy \
+      -o canmount=on
+
+  # system
+
+  zfs create root-pool/system \
+      -o mountpoint=none \
+      -o canmount=off \
+#      -o com.sun:auto-snapshot=true
+
+
+  zfs create root-pool/system/root \
+      -o mountpoint=legacy \
+      -o canmount=on
+
+  zfs create root-pool/system/var \
+      -o mountpoint=legacy \
+      -o canmount=on
+
+  zfs create root-pool/system/etc \
+      -o mountpoint=legacy \
+      -o canmount=on
+
+  # user
+
+  zfs create root-pool/user \
+      -o mountpoint=none \
+      -o canmount=off \
+      -o devices=off \
+      -o setuid=off \
+#      -o com.sun:auto-snapshot=true
+
+
+  zfs create root-pool/user/home \
+      -o mountpoint=legacy \
+      -o canmount=on
+
+  zfs create root-pool/user/home/dev \
+      -o mountpoint=legacy \
+      -o canmount=on
+
+
+  # user/other-fs - for VMs
+
+  volblocksize=4096
+
+  # reserved
+  reservation = 8G
+
+# backup-pool
+
+-O sync=disabled \
+
+-R /mnt \
+backup-pool \
+${DISK_SLOW}-part4
+
+#zfs set com.sun:auto-snapshot=false
+
+  # reserved
+  reservation = 8G
+
+  # the following pools are created by the sync
+  # backup-pool/user
+  # backup-pool/system
+
+# data-pool
+
+-O devices=off \
+-O setuid=off \
+-O sync=disabled \
+-O checksum=edonr \
+
+-R /mnt \
+data-pool \
+mirror /
+${DISK_1}-part6 \
+${DISK_0}-part6
+
+#zfs set com.sun:auto-snapshot=false
+
+  # user
+
+  zfs create data-pool/user \
+    -o mountpoint=none \
+    -o canmount=off \
+    -o devices=off \
+    -o setuid=off
+
+  mkdir -p -m 755 ~dev/.ccache ~dev/.cache/sccache ~dev/.cache/zebra-custom/state ~dev/zebra/target ~dev/.zcash/blocks ~dev/.zcash/chainstate ~dev/.zcash-testnet/testnet3/blocks ~dev/.zcash-testnet/testnet3/chainstate
+  chown -R dev:users ~dev/.ccache ~dev/.cache ~dev/zebra ~dev/.zcash ~dev/.zcash-testnet
+
+  zfs create data-pool/user/cache-data \
+    -o mountpoint=none \
+    -o canmount=off \
+    -o devices=off \
+    -o setuid=off
+
+  zfs create data-pool/user/cache-data/dev \
+    -o mountpoint=none \
+    -o canmount=off \
+    -o devices=off \
+    -o setuid=off
+
+  zfs create data-pool/user/cache-data/dev/cache \
+    -o devices=off \
+    -o setuid=off \
+    -o mountpoint=legacy \
+    -o canmount=on
+
+  mount -t zfs data-pool/user/cache-data/dev/cache ~dev/.cache
+  mount -t tmpfs -o size=8G,nr_inodes=256k,mode=755,uid=dev,gid=users tmpfs ~dev/.cache/sccache
+
+  zfs create data-pool/user/zebra \
+    -o mountpoint=none \
+    -o canmount=off \
+    -o devices=off \
+    -o setuid=off
+
+  zfs create data-pool/user/zebra/dev \
+    -o mountpoint=none \
+    -o canmount=off \
+    -o devices=off \
+    -o setuid=off
+
+  zfs create data-pool/user/zebra/dev/custom \
+    -o mountpoint=none \
+    -o canmount=off \
+    -o devices=off \
+    -o setuid=off
+
+  zfs create data-pool/user/zebra/dev/state \
+    -o mountpoint=legacy \
+    -o canmount=on \
+    -o devices=off \
+    -o setuid=off
+
+  mount -t zfs data-pool/user/zebra/dev/state ~dev/.cache/zebra-custom/state
+
+  zfs create data-pool/user/zcashd \
+    -o mountpoint=none \
+    -o canmount=off \
+    -o devices=off \
+    -o setuid=off
+
+  zfs create data-pool/user/zcashd/dev \
+    -o mountpoint=none \
+    -o canmount=off \
+    -o devices=off \
+    -o setuid=off
+
+  zfs create data-pool/user/zcashd/dev/mainnet \
+    -o mountpoint=none \
+    -o canmount=off \
+    -o devices=off \
+    -o setuid=off
+
+  zfs create data-pool/user/zcashd/dev/testnet \
+    -o mountpoint=none \
+    -o canmount=off \
+    -o devices=off \
+    -o setuid=off
+
+  zfs create data-pool/user/zcashd/dev/mainnet/blocks \
+    -o devices=off \
+    -o setuid=off \
+    -o mountpoint=legacy \
+    -o canmount=on
+
+  zfs create data-pool/user/zcashd/dev/mainnet/chainstate \
+    -o devices=off \
+    -o setuid=off \
+    -o mountpoint=legacy \
+    -o canmount=on
+
+  zfs create data-pool/user/zcashd/dev/testnet/blocks \
+    -o devices=off \
+    -o setuid=off \
+    -o mountpoint=legacy \
+    -o canmount=on
+
+  zfs create data-pool/user/zcashd/dev/testnet/chainstate \
+    -o devices=off \
+    -o setuid=off \
+    -o mountpoint=legacy \
+    -o canmount=on
+
+  mkdir -p /var/lib/docker
+  zfs create data-pool/docker \
+    -o mountpoint=legacy \
+    -o canmount=on
+
+  mount -t zfs data-pool/user/zcashd/dev/mainnet/blocks ~dev/.zcash/blocks
+  mount -t zfs data-pool/user/zcashd/dev/mainnet/chainstate ~dev/.zcash/chainstate
+
+  mount -t zfs data-pool/user/zcashd/dev/testnet/blocks ~dev/.zcash-testnet/testnet3/blocks
+  mount -t zfs data-pool/user/zcashd/dev/testnet/chainstate ~dev/.zcash-testnet/testnet3/chainstate
+
+  mount -t zfs data-pool/docker /var/lib/docker
+
+  # reserved
+  reservation = 8G
+
+# might be temporarily needed after install
+
+# already in fileSystems
+#zpool import -f data-pool
+
+# already in boot.zfs.extraPools
+#zpool import -f backup-pool
+
+# Finally, fixup mount point permissions
+chown -R dev:users ~dev
+
+# And upgrade to the newest features
+zpool upgrade --all
